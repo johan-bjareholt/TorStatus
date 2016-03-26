@@ -1,0 +1,43 @@
+* {
+	font-family: Arial;
+}
+
+body {
+	margin: 0;
+}
+
+.content {
+	margin: 0;
+	padding: 0;
+	position: relative;
+
+	border-style: solid;	
+	border-color: black;
+	border-width: 3px 1px 1px 1px;
+}
+
+#title {
+	border-width: 0px 0px 1px 0px;
+	border-style: solid;
+	border-color: black;
+	
+	background-color: #ddd;
+	
+	padding: 1px;
+	padding-left: 25px;
+}
+
+#infotable {
+	background-color: #eee;
+	
+	padding: 25px;
+	padding-left: 25px;
+	margin: 0;
+	width: 100%;
+}
+
+#detailslink {
+	position: absolute;
+	right: 25px;
+	bottom: 25px;
+}

@@ -34,48 +34,64 @@ function getTimeDiff(startdate, enddate){
 	return Math.floor(days)+"d "+Math.floor(hours%24)+"h";
 }
 
-function updateRelay(fingerprint){
+function updateRelay(relay){
+	var titleobj = document.getElementById("nickname");
+	titleobj.textContent = relay['nickname'];
+	var countryobj = document.getElementById("country");
+	countryobj.textContent = relay['country_name'];
+	var runningobj = document.getElementById("running");
+	runningobj.textContent = relay['running'];
+	var bandwidthobj = document.getElementById("bandwidth");
+	bandwidthobj.textContent = Math.floor((relay['advertised_bandwidth'])/1000)+"kB";
+	var contactobj = document.getElementById("contact");
+	contactobj.textContent = relay['contact'];
+	var detailslinkobj = document.getElementById("detailslink");
+	detailslinkobj.href = "http://globe.torproject.org/#/relay/"+relay.fingerprint
+
+	// Get age
+	var datestr = relay['first_seen'].split(' ')[0];
+	var timestr = relay['first_seen'].split(' ')[1];
+	var created = new Date(datestr+"T"+timestr);
+	var current = new Date();
+	var age = getTimeDiff(created, current);
+	// Set age
+	var ageobj = document.getElementById("age");
+	ageobj.textContent = age;
+	
+	// Get relay uptime	
+	var datestr = relay['last_restarted'].split(' ')[0];
+	var timestr = relay['last_restarted'].split(' ')[1];
+	var restarted = new Date(datestr+"T"+timestr);
+	var current = new Date();
+	var uptime = getTimeDiff(restarted, current);
+	// Set uptime
+	var uptimeobj = document.getElementById("uptime");
+	uptimeobj.textContent = uptime;
+}
+
+function getRelay(fingerprint, callback){
 	url="https://onionoo.torproject.org/details?fingerprint="+fingerprint;
 	response = httpGet(url, function(res){
 		if (res.readyState == 4){
 			if (res.status != 200){
-				console.error("Http request error");
+				console.error("Http request error: " + res.status);
 			}
 			else {
 				var relay = JSON.parse(res.response)['relays'][0];
-				var titleobj = document.getElementById("nickname");
-				titleobj.textContent = relay['nickname'];
-				var countryobj = document.getElementById("country");
-				countryobj.textContent = relay['country_name'];
-				var runningobj = document.getElementById("running");
-				runningobj.textContent = relay['running'];
-				var bandwidthobj = document.getElementById("bandwidth");
-				bandwidthobj.textContent = Math.floor((relay['advertised_bandwidth'])/1000)+"kB";
-				var contactobj = document.getElementById("contact");
-				contactobj.textContent = relay['contact'];
-				var detailslinkobj = document.getElementById("detailslink");
-				detailslinkobj.href = "http://globe.torproject.org/#/relay/"+fingerprint
-
-				// Get age
-				var datestr = relay['first_seen'].split(' ')[0];
-				var timestr = relay['first_seen'].split(' ')[1];
-				var created = new Date(datestr+"T"+timestr);
-				var current = new Date();
-				var age = getTimeDiff(created, current);
-				// Set age
-				var ageobj = document.getElementById("age");
-				ageobj.textContent = age;
-				
-				// Get relay uptime	
-				var datestr = relay['last_restarted'].split(' ')[0];
-				var timestr = relay['last_restarted'].split(' ')[1];
-				var restarted = new Date(datestr+"T"+timestr);
-				var current = new Date();
-				var uptime = getTimeDiff(restarted, current);
-				// Set uptime
-				var uptimeobj = document.getElementById("uptime");
-				uptimeobj.textContent = uptime;
+				callback(relay);
 			}
+		}
+	});
+}
+
+function getRelay2(fingerprint, callback){
+	url="https://onionoo.torproject.org/details?fingerprint="+fingerprint;
+	jQuery.ajax({
+		dataType: "json",
+		url: url,
+		success: function(data){
+			var relay = data['relays'][0];
+			callback(relay);
 		}
 	});
 }
@@ -88,6 +104,6 @@ window.onload = function(){
 		titleobj.textContent = "No fingerprint specified";
 	}
 	else {
-		updateRelay(params.fingerprint);
+		getRelay2(params.fingerprint, updateRelay);
 	}
 }

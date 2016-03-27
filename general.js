@@ -71,7 +71,8 @@ function updateRelay(relay){
 
 function getApiUrl(){
 	proto = document.location.protocol;
-	proto = "http:";
+	if (proto == "file:")
+		proto = "http:";
 	url = proto + "//onionoo.torproject.org/";
 	console.log(url);
 	return url;

@@ -85,10 +85,8 @@ function getRelay(fingerprint, callback){
 			if (res.status != 200){
 				console.error("Http request error: " + res.status);
 			}
-			else {
-				var relay = JSON.parse(res.response)['relays'][0];
-				callback(relay);
-			}
+			var relay = JSON.parse(res.response)['relays'][0];
+			callback(relay);
 		}
 	});
 }

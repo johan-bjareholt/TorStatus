@@ -69,8 +69,17 @@ function updateRelay(relay){
 	uptimeobj.textContent = uptime;
 }
 
+function getApiUrl(){
+	proto = document.location.protocol;
+	proto = "http:";
+	url = proto + "//onionoo.torproject.org/";
+	console.log(url);
+	return url;
+}
+
+
 function getRelay(fingerprint, callback){
-	url="https://onionoo.torproject.org/details?fingerprint="+fingerprint;
+	url = getApiUrl()+"details?fingerprint="+fingerprint;
 	response = httpGet(url, function(res){
 		if (res.readyState == 4){
 			if (res.status != 200){
@@ -84,19 +93,6 @@ function getRelay(fingerprint, callback){
 	});
 }
 
-function getRelay2(fingerprint, callback){
-	url="https://onionoo.torproject.org/details?fingerprint="+fingerprint;
-	jQuery.ajax({
-		dataType: "json",
-		url: url,
-		success: function(data){
-			var relay = data['relays'][0];
-			callback(relay);
-		}
-	});
-}
-
-
 window.onload = function(){
 	var params = getSearchParameters();
 	if (params.fingerprint == undefined){
@@ -104,6 +100,6 @@ window.onload = function(){
 		titleobj.textContent = "No fingerprint specified";
 	}
 	else {
-		getRelay2(params.fingerprint, updateRelay);
+		getRelay(params.fingerprint, updateRelay);
 	}
 }

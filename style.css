@@ -2,8 +2,10 @@
 	font-family: Arial;
 }
 
-body {
+html, body {
 	margin: 0;
+	height: 100%;
+	width : 100%;
 }
 
 .content {
@@ -13,7 +15,7 @@ body {
 
 	border-style: solid;	
 	border-color: black;
-	border-width: 3px 1px 1px 1px;
+	border-width: 1px;
 }
 
 #title {

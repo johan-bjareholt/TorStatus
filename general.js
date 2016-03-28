@@ -1,4 +1,4 @@
-function getSearchParameters()
+function getParameters()
 {
 	var prmstr = window.location.search.substr(1);
 	return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
@@ -48,6 +48,16 @@ function updateRelay(relay){
 	var detailslinkobj = document.getElementById("detailslink");
 	detailslinkobj.href = "http://globe.torproject.org/#/relay/"+relay.fingerprint
 
+	// Flags
+	var flags = relay.flags;
+	flagstext = ""
+	for (var i=0; i<flags.length; i++){
+		flagstext += flags[i] + ", ";
+	}
+	flagstext = flagstext.slice(0,-2);
+	var flagsobj = document.getElementById("flags");
+	flagsobj.textContent = flagstext;
+
 	// Get age
 	var datestr = relay['first_seen'].split(' ')[0];
 	var timestr = relay['first_seen'].split(' ')[1];
@@ -93,7 +103,7 @@ function getRelay(fingerprint, callback){
 }
 
 window.onload = function(){
-	var params = getSearchParameters();
+	var params = getParameters();
 	if (params.fingerprint == undefined){
 		var titleobj = document.getElementById("nickname");
 		titleobj.textContent = "No fingerprint specified";

@@ -9,36 +9,48 @@ html, body {
 }
 
 .content {
+    /* Positioning */
 	margin: 0;
 	padding: 0;
 	position: relative;
-
+    /* Border style */
 	border-style: solid;	
 	border-color: black;
 	border-width: 1px;
 }
 
 #title {
+    /* Positioning */
+	padding: 1px;
+	padding-left: 25px;
+    /* Border style */
 	border-width: 0px 0px 1px 0px;
 	border-style: solid;
 	border-color: black;
-	
+    /* Background Color */
 	background-color: #ddd;
-	
-	padding: 1px;
-	padding-left: 25px;
 }
 
 #infotable {
-	background-color: #eee;
-	
+    /* Positioning */
 	padding: 25px;
 	padding-left: 25px;
-	margin: 0;
 	width: 100%;
+	margin: 0;
+    /* Background Color */
+	background-color: #eee;
+}
+
+.key {
+    font-weight: bold;
+}
+
+.value {
+
 }
 
 #detailslink {
+    /* Positioning */
 	position: absolute;
 	right: 25px;
 	bottom: 25px;

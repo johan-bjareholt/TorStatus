@@ -1,37 +1,13 @@
-function getParameters()
-{
-	var prmstr = window.location.search.substr(1);
-	return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
-}
 
-function transformToAssocArray( prmstr )
-{
-	var params = {};
-	var prmarr = prmstr.split("&");
-	for ( var i = 0; i < prmarr.length; i++)
-	{
-		var tmparr = prmarr[i].split("=");
-		params[tmparr[0]] = tmparr[1];
+window.onload = function(){
+	var params = getParameters();
+	if (params.fingerprint == undefined){
+		var titleobj = document.getElementById("nickname");
+		titleobj.textContent = "No fingerprint specified";
 	}
-	return params;
-}
-
-
-function httpGet(url, callback)
-{
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("GET", url, true); // False for synchronous reqeust
-	xmlHttp.onreadystatechange = function(){callback(xmlHttp);};
-	xmlHttp.send();
-}
-
-function getTimeDiff(startdate, enddate){
-	var miliseconds = enddate.getTime() - startdate.getTime();
-	var seconds = miliseconds / 1000;
-	var minutes = seconds/60;
-	var hours = minutes / 60;
-	var days = hours / 24;
-	return Math.floor(days)+"d "+Math.floor(hours%24)+"h";
+	else {
+		getRelay(params.fingerprint, updateRelay);
+	}
 }
 
 function updateRelay(relay){
@@ -79,16 +55,6 @@ function updateRelay(relay){
 	uptimeobj.textContent = uptime;
 }
 
-function getApiUrl(){
-	proto = document.location.protocol;
-	if (proto == "file:")
-		proto = "http:";
-	url = proto + "//onionoo.torproject.org/";
-	console.log(url);
-	return url;
-}
-
-
 function getRelay(fingerprint, callback){
 	url = getApiUrl()+"details?fingerprint="+fingerprint;
 	response = httpGet(url, function(res){
@@ -102,13 +68,58 @@ function getRelay(fingerprint, callback){
 	});
 }
 
-window.onload = function(){
-	var params = getParameters();
-	if (params.fingerprint == undefined){
-		var titleobj = document.getElementById("nickname");
-		titleobj.textContent = "No fingerprint specified";
-	}
-	else {
-		getRelay(params.fingerprint, updateRelay);
-	}
+function getApiUrl(){
+	proto = document.location.protocol;
+	if (proto == "file:")
+		proto = "http:";
+	url = proto + "//onionoo.torproject.org/";
+	console.log(url);
+	return url;
 }
+
+
+/*
+ * Utility functions
+ */
+
+function getParameters()
+{
+	var prmstr = window.location.search.substr(1);
+	return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
+}
+
+function transformToAssocArray( prmstr )
+{
+	var params = {};
+	var prmarr = prmstr.split("&");
+	for ( var i = 0; i < prmarr.length; i++)
+	{
+		var tmparr = prmarr[i].split("=");
+		params[tmparr[0]] = tmparr[1];
+	}
+	return params;
+}
+
+function getTimeDiff(startdate, enddate){
+	var miliseconds = enddate.getTime() - startdate.getTime();
+	var seconds = miliseconds / 1000;
+	var minutes = seconds/60;
+	var hours = minutes / 60;
+	var days = hours / 24;
+	return Math.floor(days)+"d "+Math.floor(hours%24)+"h";
+}
+
+
+
+/*
+ * Custom AJAX request function
+ */
+
+function httpGet(url, callback)
+{
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("GET", url, true); // False for synchronous reqeust
+	xmlHttp.onreadystatechange = function(){callback(xmlHttp);};
+	xmlHttp.send();
+}
+

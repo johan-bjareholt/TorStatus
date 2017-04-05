@@ -22,7 +22,7 @@ function updateRelay(relay){
 	var contactobj = document.getElementById("contact");
 	contactobj.textContent = relay['contact'];
 	var detailslinkobj = document.getElementById("detailslink");
-	detailslinkobj.href = "http://globe.torproject.org/#/relay/"+relay.fingerprint
+	detailslinkobj.href = "https://atlas.torproject.org/#details/"+relay.fingerprint
 
 	// Flags
 	var flags = relay.flags;
@@ -43,8 +43,8 @@ function updateRelay(relay){
 	// Set age
 	var ageobj = document.getElementById("age");
 	ageobj.textContent = age;
-	
-	// Get relay uptime	
+
+	// Get relay uptime
 	var datestr = relay['last_restarted'].split(' ')[0];
 	var timestr = relay['last_restarted'].split(' ')[1];
 	var restarted = new Date(datestr+"T"+timestr);
